@@ -1,4 +1,4 @@
-name: CI
+name: push-build
 
 on: [push]
 
@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node_version: [16]
+        node-version: [16]
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node_version }}
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
-          node_version: ${{ matrix.node_version }}
+          node_version: ${{ matrix.node-version }}
 
       - name: install dependencies on client
         working-directory: ./client
@@ -25,9 +25,8 @@ jobs:
         working-directory: ./server
         run: yarn install
 
-      - name: run CI on server
+      - name: build application
         run: |
-          yarn install
           yarn lint
           yarn test
           yarn build
