@@ -5,28 +5,27 @@ on: [push]
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node_version: [16]
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node_version: ${{ matrix.node_version }}
 
-      - name: run CI on client
+      - name: install dependencies on client
         working-directory: ./client
-        run: |
-          yarn install
-          yarn lint
-          yarn test
-          yarn build
+        run: yarn install
+
+      - name: install dependencies on server
+        working-directory: ./server
+        run: yarn install
 
       - name: run CI on server
-        working-directory: ./server
         run: |
           yarn install
           yarn lint
